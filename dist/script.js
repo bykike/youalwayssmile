@@ -152,13 +152,15 @@ class Tile extends React.Component {
       tileStyle = {
         /* width: '62vw',
         height: '62vw', */
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
+        position: 'fixed',
+        top: '10%',
+        left: '20%',
+        transform: 'translate(-50%, -50%)',
         margin: '0',
-        marginTop: '-31vw',
-        marginLeft: '-31vw',
+        width: '58vw',
+        backgroundColor: 'rgba(0, 0, 0, 0.7)',
         boxShadow: '0 0 40px 5px rgba(0, 0, 0, 0.3)',
+        zIndex: 999,
         transform: 'none' };
 
     } else {
