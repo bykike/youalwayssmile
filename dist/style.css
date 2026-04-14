@@ -1,15 +1,16 @@
 @import 'https://fonts.googleapis.com/css?family=PT+Sans:400,700';
+
 body {
   margin: 0;
   padding: 0;
-  width: 100%; 
+  width: 100%;
   height: 100vh;
   font-family: "PT Sans";
   font-size: 18px;
+  background-color: #f6f6f6;
 }
 
 .tiles {
-  /* padding: 6vh 16vw;*/
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
@@ -18,17 +19,49 @@ body {
 }
 
 .tile {
+  position: relative;
   margin: 5%;
-  /* margin: 5%; */
   cursor: pointer;
   overflow: hidden;
-  /* width: 18vw;
-  height: 18vw; */
+  border-radius: 20px;
+  transition: transform 500ms ease, box-shadow 500ms ease;
+  display: inline-block;
+  will-change: transform, box-shadow;
 }
+
+/* pseudo-elemento como máscara redondeada */
+.tile::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 20px;
+  background: #f6f6f6;
+  z-index: 2;
+  pointer-events: none;
+  transition: border-radius 500ms ease;
+  mix-blend-mode: multiply; /* mantiene los colores reales */
+}
+
+/* Imagen base */
 .tile img {
   width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
   transition: transform 500ms ease;
+  will-change: transform;
 }
-.tile img:hover {
-  transform: scale(1.1);
+
+/* Hover: solo transformamos y ampliamos el radio del pseudo-elemento */
+.tile:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+}
+
+.tile:hover img {
+  transform: scale(1.03);
+}
+
+.tile:hover::before {
+  border-radius: 40px;
 }
