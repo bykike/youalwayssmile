@@ -1,190 +1,140 @@
-const app = document.getElementById('app');
-const data = [{
-  id: 19,
-  name: "Fire",
-  image: "images/photo-19.jpg" },
-{
-  id: 18,
-  name: "Fire",
-  image: "images/photo-18.jpg" },
-{
-  id: 17,
-  name: "Island",
-  image: "images/photo-17.jpg" },
-{
-  id: 16,
-  name: "Forest",
-  image: "images/photo-16.jpg" },
-{
-  id: 15,
-  name: "Whale",
-  image: "images/photo-15.jpg" },
-{
-  id: 14,
-  name: "Mountain",
-  image: "images/photo-14.jpg" },
-{
-  id: 13,
-  name: "Boat",
-  image: "images/photo-13.jpg" },
-{
-  id: 12,
-  name: "Flowers",
-  image: "images/photo-12.jpg" },
-{
-  id: 11,
-  name: "Fire",
-  image: "images/photo-11.jpg" },
-{
-  id: 10,
-  name: "Garden",
-  image: "images/photo-10.jpg" },
-{
-  id: 9,
-  name: "Flowers",
-  image: "images/photo-9.jpg" },
-{
-  id: 8,
-  name: "Fire",
-  image: "images/photo-8.jpg" },
-{
-  id: 7,
-  name: "Garden",
-  image: "images/photo-7.jpg" },
-{
-  id: 6,
-  name: "Fire",
-  image: "images/photo-6.jpg" },
-{
-  id: 5,
-  name: "Garden",
-  image: "images/photo-5.jpg" },
-{
-  id: 4,
-  name: "Fire",
-  image: "images/photo-4.jpg" },
-{
-  id: 3,
-  name: "Garden",
-  image: "images/photo-3.jpg" },
-{
-  id: 2,
-  name: "Garden",
-  image: "images/photo-2.jpg" },
-{
-  id: 1,
-  name: "Bridge",
-  image: "https://aws-smiles.s3.amazonaws.com/photo-1.jpg" }];
 
-
+// --- COMPONENTE PRINCIPAL ---
 class App extends React.Component {
   render() {
+    const appStyle = {
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      flexDirection: 'column',
+      /* backgroundColor: '#f5f5f5', */
+      backgroundColor: '#F6f6f6',
+      minHeight: '100vh',
+    };
+
     return /*#__PURE__*/(
-      React.createElement(Tiles, { data: this.props.data }));
+      React.createElement("div", { style: appStyle },
+        React.createElement(Tiles, { data: this.props.data })
+      )
+    );
+  }
+}
 
-  }}
-
-
+// --- LISTA DE IMÁGENES (CONTENEDOR) ---
 class Tiles extends React.Component {
   render() {
-    // Create tile for each item in data array
-    // Pass data to each tile and assign a key
+    const tilesStyle = {
+      display: 'flex',
+      flexWrap: 'wrap',          // permite múltiples filas
+      justifyContent: 'center',  // centra las filas
+      alignItems: 'center',
+      gap: '10px',               // espacio entre imágenes
+      padding: '10px',
+      maxWidth: '90vw',          // evita que se pegue a los bordes
+    };
+
     return /*#__PURE__*/(
-      React.createElement("div", { className: "tiles" },
-      this.props.data.map(data => {
-        return /*#__PURE__*/React.createElement(Tile, { data: data, key: data.id });
-      })));
+      React.createElement("div", { className: "tiles", style: tilesStyle },
+        this.props.data.map(data => {
+          return /*#__PURE__*/React.createElement(Tile, { data: data, key: data.id });
+        })
+      )
+    );
+  }
+}
 
-
-  }}
-
-
+// --- CADA IMAGEN INDIVIDUAL ---
 class Tile extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       open: false,
-      mouseOver: false };
+      mouseOver: false
+    };
 
-    // Bind properties to class instance
     this._clickHandler = this._clickHandler.bind(this);
     this._mouseEnter = this._mouseEnter.bind(this);
     this._mouseLeave = this._mouseLeave.bind(this);
   }
-  // Event handlers to modify state values
+
   _mouseEnter(e) {
     e.preventDefault();
-    if (this.state.mouseOver === false) {
-      console.log(this.props.data.name);
-      this.setState({
-        mouseOver: true });
-
+    if (!this.state.mouseOver) {
+      this.setState({ mouseOver: true });
     }
   }
+
   _mouseLeave(e) {
     e.preventDefault();
-    if (this.state.mouseOver === true) {
-      this.setState({
-        mouseOver: false });
-
+    if (this.state.mouseOver) {
+      this.setState({ mouseOver: false });
     }
   }
+
   _clickHandler(e) {
     e.preventDefault();
-    if (this.state.open === false) {
-      this.setState({
-        open: true });
-
-    } else {
-      this.setState({
-        open: false });
-
-    }
+    this.setState({ open: !this.state.open });
   }
 
   render() {
-    // Modify styles based on state values
     let tileStyle = {};
-    let headerStyle = {};
-    let zoom = {};
-    // When tile clicked
-    if (this.state.open) {
-      tileStyle = {
-        /* width: '62vw',
-        height: '62vw', */
-        position: 'fixed',
-        top: '10%',
-        left: '20%',
-        transform: 'translate(-50%, -50%)',
-        margin: '0',
-        width: '58vw',
-        backgroundColor: 'rgba(0, 0, 0, 0.7)',
-        boxShadow: '0 0 40px 5px rgba(0, 0, 0, 0.3)',
-        zIndex: 999,
-        transform: 'none' };
 
-    } else {
+    // Si Se ha hecho click sobre la imagen y ha lanzado una ventana flotante
+    if (this.state.open) {
+      tileStyle = {/*
+        position: 'fixed',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: '60vw',
+        maxHeight: '80vh',
+        objectFit: 'contain',
+        backgroundColor: 'rgba(0, 0, 0, 0.9)',
+        zIndex: 999,
+        borderRadius: '8px',
+        cursor: 'pointer',
+        boxShadow: '0 0 40px rgba(0, 0, 0, 0.5)',
+        */
+      };
+    } 
+    // Estado normal de las imágenes
+    else {
       tileStyle = {
-        /* width: '18vw',
-        height: '18vw' };*/
-         };
+      
+        /* width: this.props.data.width || '100%', */
+        height: 'auto',
+        objectFit: 'cover',
+        borderRadius: '20px',
+        cursor: 'pointer',
+        transition: 'transform 0.3s ease',
+      
+      };
+
+      // Efecto hover
+      if (this.state.mouseOver) {
+        tileStyle.transform = 'scale(1.05)';
+        tileStyle.boxShadow = '0 4px 10px rgba(0, 0, 0, 0.3)';
+        tileStyle.borderRadius = '40px';
+      }
     }
 
     return /*#__PURE__*/(
-      React.createElement("div", { className: "tile" }, /*#__PURE__*/
-      React.createElement("img", {
-        onMouseEnter: this._mouseEnter,
-        onMouseLeave: this._mouseLeave,
-        onClick: this._clickHandler,
-        src: this.props.data.image,
-        alt: this.props.data.name,
-        style: tileStyle })));
+      React.createElement("div", { className: "tile" },
+        React.createElement("img", {
+          onMouseEnter: this._mouseEnter,
+          onMouseLeave: this._mouseLeave,
+          onClick: this._clickHandler,
+          src: this.props.data.image,
+          alt: this.props.data.name,
+          style: tileStyle
+        })
+      )
+    );
+  }
+}
 
-
-
-  }}
-
-
-ReactDOM.render( /*#__PURE__*/
-React.createElement(App, { data: data }),
-app);
+// --- RENDER PRINCIPAL ---
+ReactDOM.render(
+  /*#__PURE__*/React.createElement(App, { data: data }),
+  app
+);
